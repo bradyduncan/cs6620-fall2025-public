@@ -6,9 +6,10 @@ from flask import Flask, render_template, request, jsonify, send_from_directory,
 from flask_cors import CORS
 from pydub import AudioSegment
 import tempfile
+from datetime import datetime
 
-# Version: 1.0.1
-# Built with GitHub Actions
+# Version: 2.0 - Automated Deployment
+# Deployed via: GitHub Actions + AWS SSM
 
 app = Flask(__name__)
 CORS(app)
@@ -293,6 +294,17 @@ def get_status():
         "csvLoaded": csv_file_loaded,
         "csvRecordCount": len(csv_error_data)
     })
+
+
+@app.route('/health')
+def health():
+    """Health check endpoint with version and deployment metadata."""
+    return {
+        'status': 'healthy',
+        'version': '2.0',
+        'deployment_method': 'automated',
+        'timestamp': datetime.now().isoformat()
+    }
 
 
 # Error labeling routes
